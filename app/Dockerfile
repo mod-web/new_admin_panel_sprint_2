@@ -9,17 +9,18 @@ ENV UWSGI_THREADS 16
 ENV UWSGI_HARAKIRI 240
 ENV DJANGO_SETTINGS_MODULE 'config.settings'
 
-COPY run_uwsgi.sh run_uwsgi.sh
-COPY requirements.txt requirements.txt
-COPY uwsgi/uwsgi.ini uwsgi.ini
-
 RUN  apt-get update && apt-get install -y \
      gettext \
      && rm -rf /var/lib/apt/lists/* \
      && mkdir -p /opt/app/static/ \
      && mkdir -p /opt/app/media/ \
-     && pip install --upgrade pip \
-     && pip install -r requirements.txt --no-cache-dir
+     && pip install --upgrade pip
+
+RUN  pip install -r requirements.txt --no-cache-dir
+
+COPY run_uwsgi.sh run_uwsgi.sh
+COPY requirements.txt requirements.txt
+COPY uwsgi/uwsgi.ini uwsgi.ini
 
 COPY . .
 

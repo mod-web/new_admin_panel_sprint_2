@@ -105,7 +105,7 @@ class PersonFilmwork(UUIDMixin):
         verbose_name_plural = _('Roles of Persons')
         constraints = [
             models.UniqueConstraint(
-                fields=['film_work', 'person'],
+                fields=['film_work', 'person', 'role'],
                 name='unique_film_work_person',
             ),
         ]
