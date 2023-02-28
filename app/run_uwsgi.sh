@@ -2,6 +2,16 @@
 
 set -e
 
-chown www-data:www-data /var/log
+python manage.py makemigrations movies
 
-uwsgi --strict --ini /etc/app/uwsgi.ini
+python manage.py migrate
+
+python manage.py collectstatic --no-input
+
+python manage.py makemessages -l en -l ru
+
+python manage.py compilemessages -l en -l ru
+
+python manage.py createsuperuser --noinput || true
+
+uwsgi --strict --ini /opt/app/uwsgi.ini

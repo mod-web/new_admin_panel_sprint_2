@@ -14,16 +14,15 @@ class MoviesApiMixin:
 
     def person(self, role):
 
-        return ArrayAgg('personfilmwork__person__full_name',
+        return ArrayAgg('persons__full_name',
                         filter=Q(personfilmwork__role__icontains=role),
                         distinct=True)
 
     def get_queryset(self):
         all_qs = Filmwork.objects \
-            .select_related('genrefilmwork__genre',
-                            'personfilmwork__person') \
+            .prefetch_related('genres', 'persons') \
             .values('id', 'title', 'description', 'creation_date', 'certificate', 'type', 'rating') \
-            .annotate(genres=ArrayAgg('genrefilmwork__genre__name', distinct=True),
+            .annotate(genres=ArrayAgg('genres__name', distinct=True),
                        actors=self.person(RoleType.ACTOR),
                        writers=self.person(RoleType.WRITER),
                        directors=self.person(RoleType.DIRECTOR),

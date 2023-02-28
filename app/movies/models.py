@@ -79,9 +79,12 @@ class GenreFilmwork(UUIDMixin):
     class Meta:
         verbose_name = _('Movie genre')
         verbose_name_plural = _('Movie genres')
-        # indexes = [
-        #     models.UniqueConstraint(fields=['film_work_id', 'genre_id'], name='film_work_genre')
-        # ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['film_work', 'genre'],
+                name='unique_film_work_genre',
+            ),
+        ]
         db_table = "content\".\"genre_film_work"
 
 
@@ -92,11 +95,6 @@ class RoleType(models.TextChoices):
 
 
 class PersonFilmwork(UUIDMixin):
-    # class RoleType(models.TextChoices):
-    #     ACTOR = 'A', _('Actor')
-    #     WRITER = 'W', _('Writer')
-    #     DIRECTOR = 'D', _('Director')
-
     film_work = models.ForeignKey('Filmwork', on_delete=models.CASCADE)
     person = models.ForeignKey('Person', on_delete=models.CASCADE)
     role = models.CharField(_('Role'), null=True, max_length=1, choices=RoleType.choices)
@@ -105,7 +103,10 @@ class PersonFilmwork(UUIDMixin):
     class Meta:
         verbose_name = _('Role of the person')
         verbose_name_plural = _('Roles of Persons')
-        # indexes = [
-        #     models.UniqueConstraint(fields=['film_work_id', 'person_id', 'role'], name='film_work_person_role')
-        # ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['film_work', 'person'],
+                name='unique_film_work_person',
+            ),
+        ]
         db_table = "content\".\"person_film_work"
