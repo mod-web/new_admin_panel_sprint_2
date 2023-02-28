@@ -16,12 +16,12 @@ RUN  apt-get update && apt-get install -y \
      && mkdir -p /opt/app/media/ \
      && pip install --upgrade pip
 
-RUN  pip install -r requirements.txt --no-cache-dir
-
 COPY run_uwsgi.sh run_uwsgi.sh
 COPY requirements.txt requirements.txt
-COPY uwsgi/uwsgi.ini uwsgi.ini
 
+RUN  pip install -r requirements.txt --no-cache-dir
+
+COPY uwsgi/uwsgi.ini uwsgi.ini
 COPY . .
 
 RUN chmod +x run_uwsgi.sh
